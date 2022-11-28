@@ -1,0 +1,25 @@
+{% extends "userhome.html" %}
+{% block content %}
+<form name="form1" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div align="center">
+        <table border="0" width="300" height="125">
+            <tr>
+                <td>Company Name</td><td><input type="text" name="t1" id=""></td>
+            </tr>
+            <tr>
+                <td>Symbol</td><td><input type="text" name="t2" id=""></td>
+            </tr>
+            <tr>
+                <td>Image</td><td><input type="file" name="img" id=""></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="b1" value="Submit">
+                </td>
+            </tr>
+           
+        </table>
+    </div>
+</form>
+{% endblock %}

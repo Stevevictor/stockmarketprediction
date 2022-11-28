@@ -1,0 +1,53 @@
+{% extends "userhome.html" %}
+{% block content %}
+<form name="form1" method="post">
+    {% csrf_token %}
+    <div align="center">
+        <table border="0" width="300" height="125">
+            <tr>
+                <th><span class="style1">Select Stock</span></th>
+                <td>
+                    <select name="stock">
+                        {% for d in datas %}
+                        <option value="{{d.2}}">{{d.1}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr><td>Date</td><td><input type="date" name="t1" id=""></td></tr>
+            <tr>
+                <td>
+                    <input type="submit" name="b1" value="Submit">
+                </td>
+            </tr>
+            <tr>
+                <th>
+Predicted Price
+                </th>
+                <th>
+<input type="text" name="t3" value="{{price}}" id="">
+                </th>
+            </tr>
+            <tr>
+                <th>
+Start Price
+                </th>
+                <th>
+<input type="text" name="t3" value="{{start}}" id="">
+                </th>
+            </tr>
+            <tr>
+                <th>
+End Price
+                </th>
+                <th>
+<input type="text" name="t3" value="{{ends}}" id="">
+                </th>
+            </tr>
+            <tr>
+                <th><a href="/stockanalysis?data={{data}}">ANALYSIS</a></th>
+            </tr>
+        </table>
+    </div>
+</form>
+{% endblock %}

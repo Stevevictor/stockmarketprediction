@@ -1,0 +1,34 @@
+{% extends "commonhome.html" %}
+{% block content %}
+<form  method="post" style="color: white">
+    {% csrf_token %}
+ <center>   <h1><u> Registeration</u></h1></center>
+ <br><br>
+    <div class="form-group">
+        <label for="recipient-name" class="col-form-label">Username</label>
+        <input type="text" class="form-control" placeholder=" " name="t1" id="recipient-rname" required="">
+    </div>
+    <div class="form-group">
+        <label for="recipient-email" class="col-form-label">Email</label>
+        <input type="email" class="form-control" placeholder=" " name="t2" id="recipient-email" required="">
+    </div>
+    <div class="form-group">
+        <label for="password1" class="col-form-label">Password</label>
+        <input type="password" class="form-control" placeholder=" " name="t3" id="password1" required="">
+    </div>
+    <div class="form-group">
+        <label for="password2" class="col-form-label">Confirm Password</label>
+        <input type="password" class="form-control" placeholder=" " name="t4" id="password2" required="">
+    </div>
+    <div class="sub-w3l">
+        <div class="sub-agile">
+            <input type="checkbox" id="brand2" value="">
+            <label for="brand2" class="mb-3">
+                <span></span>I Accept to the Terms & Conditions</label>
+        </div>
+    </div>
+    <div class="right-w3l"> 
+        <input type="submit" class="form-control serv_bottom" name="b1" value="Register">
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "userhome.html" %}
+{% block content %}
+<html>
+
+<head>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript">
+        var dataPoints = [];
+        var dataMaster = {};
+
+        function graph() {
+
+            // document.getElementById("testdisplay").innerHTML = "<form method='POST'><table> <tr> <td> Select Prediction Date</td> <td><input type='date' id='dates' /></td> </tr> <tr> <td>  </td> <td> <input type='button' name='click' value='Submit' onclick='newgraph();'/> </td> </tr> </table></form>";
+
+            var stockname = document.form1.stock.value;
+            $.getJSON("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" + stockname + "&apikey=OXEWYUN5KP4117WN", function(data) {
+                dataMaster = data
+                calldata(data, stockname);
+
+
+            });
+        }
+
+
+
+        function calldata(data, stockname) {
+            $.each(data, function(key, value) {
+                if (key === 'Monthly Time Series') {
+                    $.each(value, function(key1, value1) {
+                        //
+                        //                                console.log("data key", key1)
+                        //                                console.log("data", value1)
+                        var str = key1.split('-');
+                        //    console.log("data", str[1])
+                        dataPoints.push({
+                            x: new Date(parseInt(str[0]), parseInt(str[1]) - 1, parseInt(str[2])),
+                            y: parseFloat(value1["2. high"])
+                        });
+
+
+                    });
+
+
+                }
+            });
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: "Stock Market:" + stockname
+                },
+                data: [{
+                    type: "area",
+                    dataPoints: dataPoints,
+                }]
+            });
+            chart.render();
+        }
+
+
+
+
+        function newgraph() {
+            var stockname = document.form1.stock.value;
+            var predcitDate = document.getElementById("dates").value;
+            console.log(predcitDate);
+            
+            var newData = $.getJSON("http://localhost:5000/api/stock?stock_name="+stockname, function(newData) {
+               
+                console.log(newData)
+                console.log('typeOf(newData):', typeof(newData))
+                console.log(dataMaster['Monthly Time Series'])
+                console.log('newData.value: ', newData.value)
+                var value = newData.value
+                dataMaster['Monthly Time Series'][predcitDate] = {
+                    "1. open": value,
+                    "2. high": value,
+                    "3. low": value,
+                    "4. close": value,
+                    "5. volume": value
+                }
+
+                console.log("dataMaster: ", dataMaster)
+                calldata(dataMaster, stockname);
+            });
+
+            console.log("Clicked" + dataPoints);
+        }
+    </script>
+    <style type="text/css">
+        <!-- .style1 {
+            font-size: 30px;
+
+            font-weight: bold;
+        }
+
+        -->
+    </style>
+
+</head>
+
+<body>
+    <fieldset>
+        <form name="form1" method="post">
+            <div align="center">
+                <table border="0" width="300" height="125">
+                    <tr>
+                        <th><span class="style1">Select Stock</span></th>
+                        <td>
+                            <select name="stock">
+                               {% for d in data %}
+                               <option value="{{d.2}}">{{d.1}}</option>
+                               {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div align="center">
+                                <input type="button" name="Submit" value="Submit" onclick="graph();">
+                            </div>
+                            <div id="testdisplay"></div>
+                        </td>
+
+                    </tr>
+
+                </table>
+            </div>
+        </form>
+    </fieldset>
+    <fieldset>
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    </fieldset>
+</body>
+
+</html> 
+{% endblock %}
